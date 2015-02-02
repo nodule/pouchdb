@@ -213,7 +213,7 @@
       "description": "post() new documents without an _id",
       "ns": "pouchdb",
       "name": "post",
-      "fn": "on.input.in = function() {\n  input.db.put(data, function(err, response) {\n    if(err) {\n      output({error: err});\n    } else {\n      // get full updated document.\n      input.db.get(response.id).then(function(doc) {\n        output({out: data});\n      });\n    }\n  });\n};\n"
+      "fn": "on.input.in = function() {\n  input.db.post(data, function(err, response) {\n    if(err) {\n      output({error: err});\n    } else {\n      // get full updated document.\n      input.db.get(response.id).then(function(doc) {\n        output({out: data});\n      });\n    }\n  });\n};\n"
     },
     {
       "ports": {

@@ -1,5 +1,5 @@
 on.input.in = function() {
-  input.db.put(data, function(err, response) {
+  input.db.post(data, function(err, response) {
     if(err) {
       output({error: err});
     } else {
