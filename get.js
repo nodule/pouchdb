@@ -10,7 +10,7 @@ module.exports = {
     input: {
       db: {
         title: "Database",
-        type: "Datastore"
+        type: "PouchDB"
       },
       "in": {
         title: "DocumentId",

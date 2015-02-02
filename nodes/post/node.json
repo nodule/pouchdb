@@ -10,7 +10,7 @@
     "input": {
       "db": {
         "title": "Database",
-        "type": "Datastore"
+        "type": "PouchDB"
       },
       "in": {
         "title": "Document",
