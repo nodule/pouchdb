@@ -1,41 +1,35 @@
 title: Test database
-ns: nedb
+ns: pouchdb
 name: test
 id: TestDataBase
 
-Database(nedb/datastore)
-Insert(nedb/insert)
-Update(nedb/update)
-Remove(nedb/remove)
-Find(nedb/find)
-Count(nedb/count)
+Database(pouchdb/db)
+Post(pouchdb/post)
+Put(pouchdb/put)
+Destroy(pouchdb/destroy)
+Get(pouchdb/get)
 Log(console/log)
 Complete(console/log)
 
 # Bug should throw no such port..
 # {} -> @in Database
-#{} -> options Database
+{"name": "rhalff"} -> options Database
 
 "complete!" -> @msg Complete
 
-Database db -> db Insert
-Database db -> db Find
-Database db -> db Count
-
-Database error -> msg Log
+Database db -> db Post
+Database db -> db Get
+#Database error -> msg Log
 
 {
   "uname": "rhalff",
   "first": "Rob",
   "last": "Halff"
-} -> in Insert
+} -> in Post
 
-"rhalff" -> [uname] in Find
+#"rhalff" -> in Get
 
-{} -> in Count
+#Post out -> :start Get
 
-Insert out -> :start Find
-Insert out -> :start Count
-
-Find out -> msg Log
-Count out -> msg Log
+Get out -> msg Log
+Post out -> msg Log
