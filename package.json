@@ -1,0 +1,29 @@
+{
+  "name": "chix-pouchdb",
+  "description": "PouchDB for Chiχ",
+  "author": "Rob Halff <rob.halff@gmail.com>",
+  "version": "0.0.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodule/pouchdb.git"
+  },
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "scripts": {
+    "test": "chit -r"
+  },
+  "dependencies": {
+    "pouchdb": "^3.2.1"
+  },
+  "devDependencies": {
+    "chit": "0.x.x",
+    "chix-flow": "^0.12.0",
+    "chix-monitor-npmlog": "0.0.5"
+  },
+  "chix": {
+    "name": "pouchdb",
+    "color": "rgb(136,0,35)"
+  }
+}

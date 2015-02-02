@@ -1,0 +1,26 @@
+{
+  "name": "destroy",
+  "ns": "pouchdb",
+  "description": "PouchDB",
+  "phrases": {
+    "active": "Destroying database"
+  },
+  "ports": {
+    "input": {
+      "db": {
+        "title": "DB",
+        "type": "PouchDB"
+      }
+    },
+    "output": {
+      "info": {
+        "title": "Info",
+        "type": "object"
+      },
+      "error": {
+        "title": "Error",
+        "type": "Error"
+      }
+    }
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "name": "pouchdb",
+  "description": "PouchDB for Chiχ",
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nodule/pouchdb.git"
+  },
+  "dependencies": {
+    "pouchdb": "^3.2.1"
+  },
+  "nodes": [
+    {
+      "ports": {
+        "input": {
+          "options": {
+            "title": "Options",
+            "type": "object",
+            "required": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "title": "Name",
+                "description": "The database Name"
+              },
+              "auto_compaction": {
+                "type": "boolean",
+                "title": "Auto Compaction",
+                "description": "This turns on auto compaction, which means compact() is called after every change to the database.",
+                "default": false
+              },
+              "adapter": {
+                "type": "string",
+                "description": "If unspecified, PouchDB will infer this automatically, preferring IndexedDB to WebSQL in browsers that support both (i.e. Chrome, Opera and Android 4.4+).",
+                "enum": [
+                  "idb",
+                  "leveldb",
+                  "websql",
+                  "http"
+                ],
+                "required": false
+              },
+              "ajax": {
+                "type": "object",
+                "description": "An object of options to be sent to the ajax requester.",
+                "required": false
+              }
+            }
+          }
+        },
+        "output": {
+          "db": {
+            "title": "Database",
+            "type": "PouchDB"
+          }
+        }
+      },
+      "dependencies": {
+        "npm": {
+          "pouchdb": "latest"
+        }
+      },
+      "phrases": {
+        "active": "Creating database"
+      },
+      "description": "PouchDB",
+      "ns": "pouchdb",
+      "name": "db",
+      "fn": "output = function() {\n  output({db: new pouchdb(input.options)});\n};\n"
+    },
+    {
+      "ports": {
+        "input": {
+          "db": {
+            "title": "DB",
+            "type": "PouchDB"
+          }
+        },
+        "output": {
+          "info": {
+            "title": "Info",
+            "type": "object"
+          },
+          "error": {
+            "title": "Error",
+            "type": "Error"
+          }
+        }
+      },
+      "phrases": {
+        "active": "Destroying database"
+      },
+      "description": "PouchDB",
+      "ns": "pouchdb",
+      "name": "destroy",
+      "fn": "output = function() {\n  db.destroy(function destroyDatabase(err, info) {\n    if (err) {\n      output({error: err});\n    } else {\n      output({info: info});\n    }\n  });\n};\n"
+    },
+    {
+      "ports": {
+        "input": {
+          "db": {
+            "title": "Database",
+            "type": "Datastore"
+          },
+          "in": {
+            "title": "DocumentId",
+            "type": "string",
+            "async": true
+          },
+          "options": {
+            "title": "Options",
+            "type": "object",
+            "properties": {
+              "rev": {
+                "title": "Revision",
+                "description": "Fetch specific revision of a document. Defaults to winning revision",
+                "type": "boolean",
+                "default": false
+              },
+              "revs": {
+                "title": "Revision History",
+                "description": "Include revision history of the document",
+                "type": "boolean",
+                "default": false
+              },
+              "revs_info": {
+                "title": "Revision Info",
+                "description": "Include a list of revisions of the document, and their availability",
+                "type": "boolean",
+                "default": false
+              },
+              "open_revs": {
+                "title": "Open Revision",
+                "description": "Fetch all leaf revisions if open_revs=\"all\" or fetch all leaf revisions specified in open_revs array. Leaves will be returned in the same order as specified in input array.",
+                "type": "boolean",
+                "default": false
+              },
+              "conflicts": {
+                "title": "Conflicts",
+                "description": "If specified, conflicting leaf revisions will be attached in _conflicts array",
+                "type": "boolean",
+                "default": false
+              },
+              "attachments": {
+                "title": "Attachments",
+                "description": "Include attachment data",
+                "type": "boolean",
+                "default": false
+              },
+              "local_seq": {
+                "title": "Include sequence number",
+                "description": "Include sequence number of the revision in the database",
+                "type": "boolean",
+                "default": false
+              },
+              "ajax": {
+                "title": "Ajax",
+                "description": "An object of options to be sent to the ajax requester",
+                "type": "object",
+                "required": false
+              }
+            }
+          }
+        },
+        "output": {
+          "out": {
+            "title": "Document",
+            "type": "object"
+          },
+          "error": {
+            "title": "Error",
+            "type": "Error"
+          }
+        }
+      },
+      "phrases": {
+        "active": "Putting document"
+      },
+      "async": true,
+      "description": "Retrieves a document",
+      "ns": "pouchdb",
+      "name": "get",
+      "fn": "on.input.in = function() {\n  input.db.get(response.id, function(err, doc) {\n    if (err) {\n      output({error: err});\n    } else {\n      output({out: doc});\n    }\n  });\n};\n"
+    },
+    {
+      "ports": {
+        "input": {
+          "db": {
+            "title": "Database",
+            "type": "Datastore"
+          },
+          "in": {
+            "title": "Document",
+            "type": "object",
+            "async": true
+          }
+        },
+        "output": {
+          "out": {
+            "title": "New Document",
+            "type": "object"
+          },
+          "error": {
+            "title": "Error",
+            "type": "Error"
+          }
+        }
+      },
+      "phrases": {
+        "active": "Posting document"
+      },
+      "async": true,
+      "description": "post() new documents without an _id",
+      "ns": "pouchdb",
+      "name": "post",
+      "fn": "on.input.in = function() {\n  input.db.put(data, function(err, response) {\n    if(err) {\n      output({error: err});\n    } else {\n      // get full updated document.\n      input.db.get(response.id).then(function(doc) {\n        output({out: data});\n      });\n    }\n  });\n};\n"
+    },
+    {
+      "ports": {
+        "input": {
+          "db": {
+            "title": "Database",
+            "type": "Datastore"
+          },
+          "in": {
+            "title": "Document",
+            "type": "object",
+            "async": true
+          }
+        },
+        "output": {
+          "out": {
+            "title": "Updated Document",
+            "type": "object"
+          },
+          "error": {
+            "title": "Error",
+            "type": "Error"
+          }
+        }
+      },
+      "phrases": {
+        "active": "Putting document"
+      },
+      "async": true,
+      "description": "Create a new document or update an existing document. If the document already exists, you must specify its revision _rev, otherwise a conflict will occur.",
+      "ns": "pouchdb",
+      "name": "put",
+      "fn": "on.input.in = function() {\n  input.db.put(data, function(err, response) {\n    if(err) {\n      output({error: err});\n    } else {\n      // get full updated document.\n      input.db.get(response.id).then(function(doc) {\n        output({out: data});\n      });\n    }\n  });\n};\n"
+    }
+  ],
+  "twigs": []
+}
