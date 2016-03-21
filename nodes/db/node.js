@@ -1,3 +1,3 @@
 output = function() {
-  cb({db: new pouchdb($.options)});
+  cb({db: $.create(new pouchdb($.options))});
 };

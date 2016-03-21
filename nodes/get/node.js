@@ -1,9 +1,9 @@
 on.input.in = function() {
   $.db.get(response.id, function(err, doc) {
     if (err) {
-      output({error: err});
+      output({error: $.create(err)});
     } else {
-      output({out: doc});
+      output({out: $.create(doc)});
     }
   });
 };
