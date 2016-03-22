@@ -66,7 +66,7 @@
       "description": "PouchDB",
       "ns": "pouchdb",
       "name": "db",
-      "fn": "output = function() {\n  cb({db: new pouchdb(input.options)});\n};\n"
+      "fn": "output = function() {\n  cb({db: $.create(new pouchdb($.options))});\n};\n"
     },
     {
       "ports": {
@@ -93,7 +93,7 @@
       "description": "PouchDB",
       "ns": "pouchdb",
       "name": "destroy",
-      "fn": "output = function() {\n  db.destroy(function destroyDatabase(err, info) {\n    if (err) {\n      output({error: err});\n    } else {\n      output({info: info});\n    }\n  });\n};\n"
+      "fn": "output = function() {\n  db.destroy(function destroyDatabase(err, info) {\n    if (err) {\n      output({error: $.create(err)});\n    } else {\n      output({info: $.create(info)});\n    }\n  });\n};\n"
     },
     {
       "ports": {
@@ -180,7 +180,7 @@
       "description": "Retrieves a document",
       "ns": "pouchdb",
       "name": "get",
-      "fn": "on.input.in = function() {\n  input.db.get(response.id, function(err, doc) {\n    if (err) {\n      output({error: err});\n    } else {\n      output({out: doc});\n    }\n  });\n};\n"
+      "fn": "on.input.in = function() {\n  $.db.get(response.id, function(err, doc) {\n    if (err) {\n      output({error: $.create(err)});\n    } else {\n      output({out: $.create(doc)});\n    }\n  });\n};\n"
     },
     {
       "ports": {
@@ -213,7 +213,7 @@
       "description": "post() new documents without an _id",
       "ns": "pouchdb",
       "name": "post",
-      "fn": "on.input.in = function() {\n  input.db.post(data, function(err, response) {\n    if(err) {\n      output({error: err});\n    } else {\n      // get full updated document.\n      input.db.get(response.id).then(function(doc) {\n        output({out: data});\n      });\n    }\n  });\n};\n"
+      "fn": "on.input.in = function() {\n  $.db.post($.in, function(err, response) {\n    if(err) {\n      output({error: $.create(err)});\n    } else {\n      // get full updated document.\n      $.db.get(response.id).then(function(doc) {\n        output({out: $.get('in')});\n      });\n    }\n  });\n};\n"
     },
     {
       "ports": {
@@ -246,7 +246,7 @@
       "description": "Create a new document or update an existing document. If the document already exists, you must specify its revision _rev, otherwise a conflict will occur.",
       "ns": "pouchdb",
       "name": "put",
-      "fn": "on.input.in = function() {\n  input.db.put(data, function(err, response) {\n    if(err) {\n      output({error: err});\n    } else {\n      // get full updated document.\n      input.db.get(response.id).then(function(doc) {\n        output({out: data});\n      });\n    }\n  });\n};\n"
+      "fn": "on.input.in = function() {\n  $.db.put($.in, function(err, response) {\n    if(err) {\n      output({error: $.create(err)});\n    } else {\n      // get full updated document.\n      $.db.get(response.id).then(function(doc) {\n        output({out: $.get('in')});\n      });\n    }\n  });\n};\n"
     }
   ],
   "twigs": []
