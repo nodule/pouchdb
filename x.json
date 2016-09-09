@@ -11,6 +11,17 @@
   },
   "nodes": [
     {
+      "name": "db",
+      "ns": "pouchdb",
+      "description": "PouchDB",
+      "phrases": {
+        "active": "Creating database"
+      },
+      "dependencies": {
+        "npm": {
+          "pouchdb": "latest"
+        }
+      },
       "ports": {
         "input": {
           "options": {
@@ -55,20 +66,15 @@
           }
         }
       },
-      "dependencies": {
-        "npm": {
-          "pouchdb": "latest"
-        }
-      },
-      "phrases": {
-        "active": "Creating database"
-      },
-      "description": "PouchDB",
-      "ns": "pouchdb",
-      "name": "db",
       "fn": "output = function() {\n  cb({db: $.create(new pouchdb($.options))});\n};\n"
     },
     {
+      "name": "destroy",
+      "ns": "pouchdb",
+      "description": "PouchDB",
+      "phrases": {
+        "active": "Destroying database"
+      },
       "ports": {
         "input": {
           "db": {
@@ -87,15 +93,16 @@
           }
         }
       },
-      "phrases": {
-        "active": "Destroying database"
-      },
-      "description": "PouchDB",
-      "ns": "pouchdb",
-      "name": "destroy",
       "fn": "output = function() {\n  db.destroy(function destroyDatabase(err, info) {\n    if (err) {\n      output({error: $.create(err)});\n    } else {\n      output({info: $.create(info)});\n    }\n  });\n};\n"
     },
     {
+      "name": "get",
+      "ns": "pouchdb",
+      "description": "Retrieves a document",
+      "async": true,
+      "phrases": {
+        "active": "Putting document"
+      },
       "ports": {
         "input": {
           "db": {
@@ -173,16 +180,16 @@
           }
         }
       },
-      "phrases": {
-        "active": "Putting document"
-      },
-      "async": true,
-      "description": "Retrieves a document",
-      "ns": "pouchdb",
-      "name": "get",
       "fn": "on.input.in = function() {\n  $.db.get(response.id, function(err, doc) {\n    if (err) {\n      output({error: $.create(err)});\n    } else {\n      output({out: $.create(doc)});\n    }\n  });\n};\n"
     },
     {
+      "name": "post",
+      "ns": "pouchdb",
+      "description": "post() new documents without an _id",
+      "async": true,
+      "phrases": {
+        "active": "Posting document"
+      },
       "ports": {
         "input": {
           "db": {
@@ -206,16 +213,16 @@
           }
         }
       },
-      "phrases": {
-        "active": "Posting document"
-      },
-      "async": true,
-      "description": "post() new documents without an _id",
-      "ns": "pouchdb",
-      "name": "post",
       "fn": "on.input.in = function() {\n  $.db.post($.in, function(err, response) {\n    if(err) {\n      output({error: $.create(err)});\n    } else {\n      // get full updated document.\n      $.db.get(response.id).then(function(doc) {\n        output({out: $.get('in')});\n      });\n    }\n  });\n};\n"
     },
     {
+      "name": "put",
+      "ns": "pouchdb",
+      "description": "Create a new document or update an existing document. If the document already exists, you must specify its revision _rev, otherwise a conflict will occur.",
+      "async": true,
+      "phrases": {
+        "active": "Putting document"
+      },
       "ports": {
         "input": {
           "db": {
@@ -239,15 +246,7 @@
           }
         }
       },
-      "phrases": {
-        "active": "Putting document"
-      },
-      "async": true,
-      "description": "Create a new document or update an existing document. If the document already exists, you must specify its revision _rev, otherwise a conflict will occur.",
-      "ns": "pouchdb",
-      "name": "put",
       "fn": "on.input.in = function() {\n  $.db.put($.in, function(err, response) {\n    if(err) {\n      output({error: $.create(err)});\n    } else {\n      // get full updated document.\n      $.db.get(response.id).then(function(doc) {\n        output({out: $.get('in')});\n      });\n    }\n  });\n};\n"
     }
-  ],
-  "twigs": []
+  ]
 }
